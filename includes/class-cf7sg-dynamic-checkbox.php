@@ -120,7 +120,11 @@ class Cf7sg_Dynamic_Checkbox {
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-cf7sg-dynamic-checkbox-public.php';
+		 require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-cf7sg-dynamic-checkbox-public.php';
+
+		 //dynmaic checkbox class.
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cf7sg-dynamic-checkbox-list.php';
+
 
 		$this->loader = new Cf7sg_Dynamic_Checkbox_Loader();
 
@@ -153,10 +157,9 @@ class Cf7sg_Dynamic_Checkbox {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Cf7sg_Dynamic_Checkbox_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		//make sure the Smart grid is active.
+    $this->loader->add_action( 'admin_init', $plugin_admin, 'check_plugin_dependency',20);
+		$this->loader->add_action( 'cf7sg_enqueue_admin_editor_styles', $plugin_admin, 'enqueue_style',5);
 	}
 
 	/**
