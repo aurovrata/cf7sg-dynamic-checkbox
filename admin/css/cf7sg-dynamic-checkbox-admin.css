@@ -2,6 +2,13 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
- /* #dynamic-checkbox-tag-generator tr.multiple {
+ #dynamic-checkbox-tag-generator tr.others .multiple {
 	display: none;
-} */
+}
+
+#dynamic-checkbox-tag-generator .limit-options .max-selection {
+	width: 35px;
+}
+#dynamic-checkbox-tag-generator .limit-options {
+	margin-left: 10px;
+}

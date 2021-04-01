@@ -13,7 +13,7 @@ class CF7SG_Dynamic_Checkbox_List extends CF7SG_Dynamic_list{
     parent::__construct('dynamic_checkbox',__( 'dynamic-checkbox', 'cf7sg-dynamic-checkbox' ));
   }
   /**
-  * define the style optoins for the dynamic list construct.
+  * define the style options for the dynamic list construct.
   * the stule unique slug will be inserted as class in the cf7 tag object, allowing the field styling.
   * @return Array an array of style-slug => style label.
   */
@@ -27,11 +27,12 @@ class CF7SG_Dynamic_Checkbox_List extends CF7SG_Dynamic_list{
   }
   public function limit_checkboxes(){
     ?>
-    <span class="limit-options">
+    <span id="max-dynamic-checkbox" class="limit-options">
       <label>
-        <input  type="checkbox" value="maxcheck"/>
+        <input class="limit-check" type="checkbox" value="maxcheck"/>
         <?=__('Limit selections','cf7sg-dynamic-checkbox')?>
-        <input type="text" disabled value="3" class="max-selection"/>
+        <input type="text" disabled placeholder="3" value="" class="max-selection"/>
+        <input type="hidden" value="" class="data-attribute" />
       </label>
     </span>
     <?php
@@ -61,11 +62,30 @@ class CF7SG_Dynamic_Checkbox_List extends CF7SG_Dynamic_list{
     </span>
     <script type="text/javascript">
     (function($){
-      let $img = $('#image-<?=$type?>');
-      $('#dynamic-checkbox-tag-generator').change('.source-tab',function(e){
-        if(!$(e.target).is('.post-tab')) return;
-        if(e.target.checked) $img.show();
-        else $img.hide();
+      $('#dynamic-checkbox-tag-generator').change(':input',function(e){
+        let $target = $(e.target);
+        switch(true){
+          case $target.is('.post-tab'):
+            if($('#dynamic-checkbox-post-images').is(':checked')) $('#image-grid').show();
+            break; //nothing to do.
+          case $target.is('.source-tab'): //alternative source.
+            $('#image-grid').hide().find(':input').prop('checked', false);
+            break;
+          case $target.is('#dynamic-checkbox-post-images'):
+            if(e.target.checked) $('#image-grid').show();
+            else $('#image-grid').hide().find(':input').prop('checked', false);
+            break;
+          case $target.is('.limit-check'):
+            if(e.target.checked) $('#max-dynamic-checkbox .max-selection').prop('disabled',false);
+            else $('#max-dynamic-checkbox .max-selection').prop('disabled',true);
+            break;
+          case $target.is('.list-style'):
+            $('#max-dynamic-checkbox :input').prop('checked', false).val('');
+            break;
+          case $target.is('.max-selection'): //update hidden value.
+            $('#max-dynamic-checkbox input.data-attribute').val('maxcheck:'+e.target.value);
+            break;
+        }
       });
     })(jQuery);
     </script>
