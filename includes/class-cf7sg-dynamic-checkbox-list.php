@@ -60,35 +60,6 @@ class CF7SG_Dynamic_Checkbox_List extends CF7SG_Dynamic_list{
         <?=__('Image grid','cf7sg-dynamic-checkbox')?>
       </label>
     </span>
-    <script type="text/javascript">
-    (function($){
-      $('#dynamic-checkbox-tag-generator').change(':input',function(e){
-        let $target = $(e.target);
-        switch(true){
-          case $target.is('.post-tab'):
-            if($('#dynamic-checkbox-post-images').is(':checked')) $('#image-grid').show();
-            break; //nothing to do.
-          case $target.is('.source-tab'): //alternative source.
-            $('#image-grid').hide().find(':input').prop('checked', false);
-            break;
-          case $target.is('#dynamic-checkbox-post-images'):
-            if(e.target.checked) $('#image-grid').show();
-            else $('#image-grid').hide().find(':input').prop('checked', false);
-            break;
-          case $target.is('.limit-check'):
-            if(e.target.checked) $('#max-dynamic-checkbox .max-selection').prop('disabled',false);
-            else $('#max-dynamic-checkbox .max-selection').prop('disabled',true);
-            break;
-          case $target.is('.list-style'):
-            $('#max-dynamic-checkbox :input').prop('checked', false).val('');
-            break;
-          case $target.is('.max-selection'): //update hidden value.
-            $('#max-dynamic-checkbox input.data-attribute').val('maxcheck:'+e.target.value);
-            break;
-        }
-      });
-    })(jQuery);
-    </script>
     <?php
   }
   /**
@@ -103,20 +74,44 @@ class CF7SG_Dynamic_Checkbox_List extends CF7SG_Dynamic_list{
    * @return String an html string representing the input field to a=be added to the field wrapper and into the form.
    */
 
-  public function get_dynamic_html_field( $attrs, $options, $option_attrs, $is_multiselect, $selected){
-    $attributes ='';
+  public function get_dynamic_html_field( $attrs, $options, $option_attrs, $other_attrs, $selected){
+    $classes = array();
+    if( isset($attrs['class']) ) $classes = explode(' ',$attrs['class']);
+    $type = 'radio';
+    $name_attr='';
+    if( isset($attrs['name'])){
+      $name_attr = 'name="'.$attrs['name'];
+      if(in_array('checkbox',$classes)){
+        $name_attr.='[]';
+        $type = 'checkbox';
+      }
+      $name_attr.='"';
+    }
+    $attributes = '';
     foreach($attrs as $key=>$value){
-      if('name'==$key && $is_multiselect) $value.='[]';
+      if('name'==$key) continue;
       $attributes .= ' '.$key.'="'.$value.'"';
     }
-    $html = '<select value="'.$selected.'"'.$attributes.'>'.PHP_EOL;
+    $html = '<span '.$attributes.'>'.PHP_EOL;
     foreach($options as $value=>$label){
       $attributes ='';
-      if(isset($option_attrs[$value])) $attributes = ' '.$option_attrs[$value];
-      if($value==$selected) $attributes .=' selected="selected"';
-      $html .= '<option value="'.$value.'"'.$attributes.'>'.$label.'</option>'.PHP_EOL;
+
+      // if($value==$selected) $attributes .=' checked="true"';
+      $html .= '<label class="cf7sg-dc">'.PHP_EOL;
+      $img_el = '';
+      if(isset($option_attrs[$value])){
+        foreach($option_attrs[$value] as $name=>$value){
+          if('data-thumbnail'==$name && isset($other_attrs['imagegrid'])){
+            $img_el = '  <span class="cf7sg-dc-img"><img src="'.$value.'"/></span>'.PHP_EOL;
+          }else $attributes .= ' '.$this->format_attribute($name,$value);
+        }
+      }
+      $html .= '  <input type="'.$type.'" value="'.$value.'" '.$attributes.' '.$name_attr.'/>'.PHP_EOL;
+      $html .= $img_el;
+      $html .= '  <span class="cf7sg-dc-text">'.$label.'</span>'.PHP_EOL;
+      $html .= '</label>'.PHP_EOL;
     }
-    $html .='</select>'.PHP_EOL;
+    $html .='</span>'.PHP_EOL;
     return $html;
   }
 

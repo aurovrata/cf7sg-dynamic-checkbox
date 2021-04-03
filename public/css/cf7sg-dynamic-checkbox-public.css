@@ -2,3 +2,48 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+ .cf7sg-imagegrid .cf7sg-dc-img {
+	width: 150px;
+}
+.cf7sg-imagegrid .cf7sg-dc input {
+	display: none;
+}
+.cf7sg-imagegrid .cf7sg-dc {
+	position: relative;
+	display: inline-flex;
+}
+.cf7sg-imagegrid .cf7sg-dc-text {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	text-align: center;
+	width: 100%;
+}
+.cf7sg-imagegrid .cf7sg-dc-img:before {
+  background-color: white;
+  color: white;
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  border: 1px solid grey;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 28px;
+  transition-duration: 0.4s;
+  transform: scale(0);
+}
+ .cf7sg-imagegrid .cf7sg-dc > :checked ~ .cf7sg-dc-img:before {
+  content: "✓";
+  background-color: grey;
+  transform: scale(1);
+}
+
+.cf7sg-imagegrid .cf7sg-dc > :checked ~ .cf7sg-dc-img {
+  transform: scale(0.9);
+  z-index: -1;
+}

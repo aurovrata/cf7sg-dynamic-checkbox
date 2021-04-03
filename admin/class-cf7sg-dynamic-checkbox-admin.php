@@ -75,8 +75,17 @@ class Cf7sg_Dynamic_Checkbox_Admin {
   * Hooked on 'cf7sg_enqueue_admin_editor_styles', fired on form editor pages..
   */
   public function enqueue_style(){
-    
+
     wp_enqueue_style( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'admin/css/cf7sg-dynamic-checkbox-admin.css', array(), $this->version, 'all' );
+
+  }
+  /**
+  * enqueue css for tag manager.
+  * Hooked on 'cf7sg_enqueue_admin_editor_scripts', fired on form editor pages..
+  */
+  public function enqueue_script(){
+
+    wp_enqueue_script( $this->plugin_name, plugin_dir_url( __DIR__ ) . 'admin/js/cf7sg-dynamic-checkbox-admin.js', array('jquery'), $this->version, true );
 
   }
 

@@ -159,7 +159,8 @@ class Cf7sg_Dynamic_Checkbox {
 		$plugin_admin = new Cf7sg_Dynamic_Checkbox_Admin( $this->get_plugin_name(), $this->get_version() );
 		//make sure the Smart grid is active.
     $this->loader->add_action( 'admin_init', $plugin_admin, 'check_plugin_dependency',20);
-		$this->loader->add_action( 'cf7sg_enqueue_admin_editor_styles', $plugin_admin, 'enqueue_style',5);
+    $this->loader->add_action( 'cf7sg_enqueue_admin_editor_styles', $plugin_admin, 'enqueue_style',5);
+		$this->loader->add_action( 'cf7sg_enqueue_admin_editor_scripts', $plugin_admin, 'enqueue_script',5);
 	}
 
 	/**
